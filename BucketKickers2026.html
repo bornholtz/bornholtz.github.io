@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Picks Table</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --ink: #1a1208;
+    --cream: #faf7f0;
+    --rule: #c8b89a;
+    --entertainers: #3d1f00;
+    --entertainers-bg: #fff3e0;
+    --entertainers-stripe: #fde8c4;
+    --leaders: #001f3d;
+    --leaders-bg: #e8f0ff;
+    --leaders-stripe: #d0e0fa;
+    --musicians: #1a0030;
+    --musicians-bg: #f3e8ff;
+    --musicians-stripe: #e5d4f5;
+    --potpourri: #002a00;
+    --potpourri-bg: #e8f5e8;
+    --potpourri-stripe: #d0ead0;
+    --accent-gold: #b8860b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+    padding: 40px 24px 60px;
+    min-height: 100vh;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -1px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px auto;
+    max-width: 400px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--rule); }
+  .divider-diamond {
+    width: 8px; height: 8px;
+    background: var(--accent-gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08);
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1.5px solid var(--rule);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 640px;
+    background: var(--cream);
+  }
+
+  /* Header row */
+  thead tr th {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 14px 18px;
+    text-align: center;
+    letter-spacing: 0.03em;
+    border-right: 1px solid #3a2e20;
+  }
+  thead tr th:first-child {
+    text-align: left;
+    width: 130px;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    font-family: 'DM Mono', monospace;
+  }
+  thead tr th:last-child { border-right: none; }
+
+  /* Group header rows */
+  .group-header td {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 9px 18px 7px;
+    border-top: 2px solid;
+    border-bottom: 1px solid;
+  }
+
+  .group-entertainers td { 
+    background: var(--entertainers); 
+    color: #ffe0b2; 
+    border-color: #8b4500;
+  }
+  .group-leaders td { 
+    background: var(--leaders); 
+    color: #cce0ff; 
+    border-color: #003580;
+  }
+  .group-musicians td { 
+    background: var(--musicians); 
+    color: #e8d0ff; 
+    border-color: #4a0080;
+  }
+  .group-potpourri td { 
+    background: var(--potpourri); 
+    color: #c8eec8; 
+    border-color: #005000;
+  }
+
+  /* Data rows */
+  tbody tr.data-row td {
+    padding: 11px 18px;
+    font-size: 0.8rem;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1.35;
+  }
+
+  tbody tr.data-row td:first-child {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  tbody tr.data-row td:last-child { border-right: none; }
+
+  /* Entertainers rows */
+  .ent-row:nth-child(odd) td { 
+    background: var(--entertainers-bg); 
+    border-color: #e8c89a; 
+    color: #3d1f00;
+  }
+  .ent-row:nth-child(even) td { 
+    background: var(--entertainers-stripe); 
+    border-color: #e8c89a; 
+    color: #3d1f00;
+  }
+  .ent-row td:first-child { color: #7a4010; }
+
+  /* Leaders rows */
+  .lead-row:nth-child(odd) td { 
+    background: var(--leaders-bg); 
+    border-color: #9ab8e8; 
+    color: #001f3d;
+  }
+  .lead-row:nth-child(even) td { 
+    background: var(--leaders-stripe); 
+    border-color: #9ab8e8; 
+    color: #001f3d;
+  }
+  .lead-row td:first-child { color: #104080; }
+
+  /* Musicians rows */
+  .mus-row:nth-child(odd) td { 
+    background: var(--musicians-bg); 
+    border-color: #c8a0e8; 
+    color: #1a0030;
+  }
+  .mus-row:nth-child(even) td { 
+    background: var(--musicians-stripe); 
+    border-color: #c8a0e8; 
+    color: #1a0030;
+  }
+  .mus-row td:first-child { color: #5a1090; }
+
+  /* Potpourri rows */
+  .pot-row:nth-child(odd) td { 
+    background: var(--potpourri-bg); 
+    border-color: #98c898; 
+    color: #002a00;
+  }
+  .pot-row:nth-child(even) td { 
+    background: var(--potpourri-stripe); 
+    border-color: #98c898; 
+    color: #002a00;
+  }
+  .pot-row td:first-child { color: #206020; }
+
+  /* Bob row */
+  .bob-row td {
+    background: #1a1208;
+    color: #f5d98a;
+    border-color: #5a4a20;
+    font-style: italic;
+    text-align: center;
+    font-size: 0.78rem;
+  }
+  .bob-row td:first-child { 
+    text-align: left;
+    font-style: normal;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+  }
+
+  /* Hover effect */
+  tbody tr.data-row:hover td {
+    filter: brightness(0.94);
+    transition: filter 0.12s ease;
+  }
+
+  /* Empty cells */
+  td.empty {
+    color: #bbb !important;
+    font-style: italic;
+    font-size: 0.7rem !important;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a0907a;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle">The Official</p>
+  <h1>Bucket Kickers 2026</h1>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond"></div>
+    <div class="divider-line"></div>
+  </div>
+</header>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Sarah</th>
+        <th>Eric</th>
+        <th>Tim</th>
+        <th>Matt</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- ENTERTAINERS -->
+      <tr class="group-header group-entertainers">
+        <td colspan="5">🎬 &nbsp; Entertainers</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 1</td>
+        <td>Steve Urkel</td>
+        <td>Dick Van Dyke</td>
+        <td>Bam Margera</td>
+        <td>Phil Collins</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 2</td>
+        <td>Carl Winslow</td>
+        <td>Mel Brooks</td>
+        <td>Clint Eastwood</td>
+        <td>Liza Minnelli</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 3</td>
+        <td>The Conehead Guy</td>
+        <td>Bruce Willis</td>
+        <td>Dolly Parton</td>
+        <td>Donald Trump</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 4</td>
+        <td>Some Random White Guy</td>
+        <td>Harrison Ford</td>
+        <td>Mickey Rourke</td>
+        <td>Carol Burnett</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 5</td>
+        <td>Some Random Black Guy</td>
+        <td>David Attenborough</td>
+        <td>Edward Furlong</td>
+        <td>Mick Jagger</td>
+      </tr>
+      <tr class="data-row ent-row">
+        <td>Entertainer 6</td>
+        <td class="empty">—</td>
+        <td>Drake</td>
+        <td>Sophia Loren</td>
+        <td>Jack Nicholson</td>
+      </tr>
+
+      <!-- WORLD LEADERS -->
+      <tr class="group-header group-leaders">
+        <td colspan="5">🌍 &nbsp; World Leaders</td>
+      </tr>
+      <tr class="data-row lead-row">
+        <td>World Leader 1</td>
+        <td class="empty">—</td>
+        <td>Joe Biden</td>
+        <td style="color: #8b0000; font-weight: 500; text-shadow: 0 2px 4px rgba(139,0,0,0.5);">Ali Khamenei 💀<br><span style="font-size: 0.65rem; opacity: 0.8; font-style: italic;">d. February 28, 2026, age 86</span></td>
+        <td>King Charles</td>
+      </tr>
+      <tr class="data-row lead-row">
+        <td>World Leader 2</td>
+        <td class="empty">—</td>
+        <td>Raul Castro</td>
+        <td>Charles Grassley</td>
+        <td>Jimmy Carter</td>
+      </tr>
+      <tr class="data-row lead-row">
+        <td>World Leader 3</td>
+        <td class="empty">—</td>
+        <td>King Salman</td>
+        <td>Andrew Mountbatten-Windsor</td>
+        <td>Mitch McConnell</td>
+      </tr>
+
+      <!-- MUSICIANS -->
+      <tr class="group-header group-musicians">
+        <td colspan="5">🎵 &nbsp; Musicians</td>
+      </tr>
+      <tr class="data-row mus-row">
+        <td>Musician 1</td>
+        <td>Victoria Beckham</td>
+        <td>Frankie Valli</td>
+        <td>Lil Wayne</td>
+        <td>Elton John</td>
+      </tr>
+      <tr class="data-row mus-row">
+        <td>Musician 2</td>
+        <td>Jennifer Nettles</td>
+        <td>Michael Bolton</td>
+        <td>Yoko Ono</td>
+        <td>Willie Nelson</td>
+      </tr>
+
+      <!-- POTPOURRI -->
+      <tr class="group-header group-potpourri">
+        <td colspan="5">🎲 &nbsp; Potpourri</td>
+      </tr>
+      <tr class="data-row pot-row">
+        <td>Potpourri 1</td>
+        <td class="empty">—</td>
+        <td>Colleen Hoover</td>
+        <td>Buzz Aldrin</td>
+        <td>Will Smith</td>
+      </tr>
+      <tr class="data-row pot-row">
+        <td>Potpourri 2</td>
+        <td class="empty">—</td>
+        <td>Quinton Aaron</td>
+        <td>Bud Selig</td>
+        <td>David Beckham</td>
+      </tr>
+      <tr class="data-row pot-row">
+        <td>Potpourri 3</td>
+        <td class="empty">—</td>
+        <td>Ray J</td>
+        <td>Larry Holmes</td>
+        <td>Gisele</td>
+      </tr>
+      <!-- WILLIAM OR KATE -->
+      <tr class="group-header group-potpourri">
+        <td colspan="5">👑 &nbsp; William or Kate</td>
+      </tr>
+      <tr class="data-row pot-row">
+        <td>Pick</td>
+        <td>Bob</td>
+        <td>Billy Joel</td>
+        <td>William Shatner</td>
+        <td>Bill Clinton</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<footer>Picks table &mdash; formatted for glory</footer>
+
+</body>
+</html>
