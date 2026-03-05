@@ -237,7 +237,26 @@
     color: var(--accent-gold);
   }
 
-  /* Hover effect */
+  /* William or Kate row */
+  .royal-header td {
+    background: #1a3a3a;
+    color: #a8e0d8;
+    border-color: #2a6060;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 9px 18px 7px;
+    border-top: 2px solid #2a6060;
+    border-bottom: 1px solid #2a6060;
+  }
+  .royal-row td {
+    background: #e8f5f3;
+    border-color: #8acac4;
+    color: #0a2a28;
+  }
+  .royal-row td:first-child { color: #1a6060; }
   tbody tr.data-row:hover td {
     filter: brightness(0.94);
     transition: filter 0.12s ease;
@@ -403,10 +422,10 @@
         <td>Gisele</td>
       </tr>
       <!-- WILLIAM OR KATE -->
-      <tr class="group-header group-potpourri">
+      <tr class="group-header royal-header">
         <td colspan="5">👑 &nbsp; William or Kate</td>
       </tr>
-      <tr class="data-row pot-row">
+      <tr class="data-row royal-row">
         <td>Pick</td>
         <td>Bob</td>
         <td>Billy Joel</td>
